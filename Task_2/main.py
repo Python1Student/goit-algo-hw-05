@@ -1,9 +1,13 @@
-def generator_numbers(text: str) -> float:
-    text = text.split()  
-    for word in text:
+# Створємо генератор який оброблює переданий текст
+def generator_numbers(text: str) -> float: # type: ignore
+    # Перебираємо слова з тексту
+    for word in text.split():
+        # Перевіряємо чи слово є число
         if word.split('.')[0].isdigit(): 
+            # Повертаємо число
             yield float(word)
 
+# Створюємо функцію підрахунку доходу
 def sum_profit(text: str, func: callable) -> float:
     return sum(func(text), 0.0)
 
