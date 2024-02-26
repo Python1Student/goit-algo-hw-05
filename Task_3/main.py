@@ -6,4 +6,10 @@ def parse_log_line(line: str) -> dict:
     line = line.split(' ', 3)
     return {'date': line[0], 'time': line[1], 'level': line[2], 'message': line[3]}
 
-print(parse_log_line('2024-01-22 08:30:01 INFO User logged in successfully.'))
+
+def load_logs(file_path: str) -> list:
+    with open(file_path, 'r') as file:
+        lines_list = [parse_log_line(line) for line in file.readlines()]
+    return lines_list
+
+print(load_logs('logfile.log'))
