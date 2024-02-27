@@ -1,7 +1,8 @@
 
 def generator_numbers(text: str) -> float:  # Створємо генератор який оброблює переданий текст # type: ignore
-    for word in text.split(): # Перебираємо слова з тексту
-        if word.split('.')[0].isdigit(): # Перевіряємо чи слово є число
+    list = text.split()
+    for word in list: # Перебираємо слова з тексту
+        if word.split('.')[0].isdigit() and list.index(word) != 0 and word[-1] != '.': # Перевіряємо чи слово є число
             yield float(word) # Повертаємо число
 
 

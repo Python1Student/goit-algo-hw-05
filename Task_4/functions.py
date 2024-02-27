@@ -1,32 +1,5 @@
 from constants import *
 
-# ЗАВДАННЯ
-# Логіка команд реалізована в окремих функціях і ці функції приймають на вхід один або декілька рядків та повертають рядок.
-
-
-def add_contact_input_error(func):
-    def inner(*args, **kwargs):
-        try: return func(*args, **kwargs)
-        except: return ERROR + "Give me name and phone please"
-
-    return inner
-
-
-def read_file_error(func):
-    def inner(*args, **kwargs):
-        try: return func(*args, **kwargs)
-        except: return ERROR + "File Not Found"
-
-    return inner
-
-
-def read_contact_input_error(func):
-    def inner(*args, **kwargs):
-        try: return func(*args, **kwargs)
-        except: return ERROR + "Give me correct name please"
-
-    return inner
-
 
 # Функція для парсингу данних
 def parse_input(user_input: str) -> tuple:
@@ -53,7 +26,24 @@ def read_file() -> dict:
     # Повертаємо словник
     return contacts
 
-@add_contact_input_error
+
+# Новий декоратор, який об'єднує всі інші декоратори
+def handle_errors(func):
+    def inner(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except IndexError:
+            return ERROR + "Give me name and phone please"
+        except FileNotFoundError:
+            return ERROR + "File Not Found"
+        except KeyError:
+            return ERROR + "Give me correct name please"
+        except TypeError:
+            return ERROR + "Give me name and phone please"
+    return inner
+
+
+@handle_errors
 # Функція для додавання та модифікації словника
 def add_contact(name: str, number: str) -> str:
     # Читаємо файл та присвоюємо його значення в словник
@@ -69,8 +59,7 @@ def add_contact(name: str, number: str) -> str:
     return BOT + 'Successful!'
 
 
-@read_contact_input_error    
-@read_file_error
+@handle_errors
 # Функція Для читання контактів
 def read_contact(name: str) -> str:
     # Читаємо файл та присвоюємо його значення в словник
